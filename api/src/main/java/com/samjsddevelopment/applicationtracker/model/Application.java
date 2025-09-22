@@ -42,8 +42,8 @@ public class Application {
     @ManyToMany
     @JoinTable(
         name = "application_reviewers",
-        joinColumns = @JoinColumn(columnDefinition = "application_id"),
-        inverseJoinColumns = @JoinColumn(columnDefinition = "reviewer_id")
+        joinColumns = @JoinColumn(name = "application_id"),
+        inverseJoinColumns = @JoinColumn(name = "reviewer_id")
     )
     @Builder.Default
     private Set<Reviewer> reviewers = new HashSet<>();

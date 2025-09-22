@@ -35,7 +35,7 @@ public class Applicant {
 
     private String firstName;
 
-    private String lastLame;
+    private String lastName;
 
     private LocalDate dateOfBirth;
 
