@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-RestapitemplateApplication<restapitemplate>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.samjsddevelopment.restapitemplate.RestapitemplateApplication",
+            "projectName": "restapitemplate",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
