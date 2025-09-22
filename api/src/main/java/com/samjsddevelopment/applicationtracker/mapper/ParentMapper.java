@@ -1,10 +1,10 @@
-package com.samjsddevelopment.restapitemplate.mapper;
+package com.samjsddevelopment.applicationtracker.mapper;
 
 import org.mapstruct.Mapper;
 
-import com.samjsddevelopment.restapitemplate.dto.ParentRequest;
-import com.samjsddevelopment.restapitemplate.dto.ParentResponse;
-import com.samjsddevelopment.restapitemplate.model.Parent;
+import com.samjsddevelopment.applicationtracker.dto.ParentRequest;
+import com.samjsddevelopment.applicationtracker.dto.ParentResponse;
+import com.samjsddevelopment.applicationtracker.model.Parent;
 
 import org.mapstruct.ReportingPolicy;
 

@@ -1,13 +1,13 @@
-package com.samjsddevelopment.restapitemplate;
+package com.samjsddevelopment.applicationtracker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RestapitemplateApplication {
+public class ApplicationTrackerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RestapitemplateApplication.class, args);
+		SpringApplication.run(ApplicationTrackerApplication.class, args);
 	}
 
 }

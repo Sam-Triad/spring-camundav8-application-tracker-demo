@@ -1,4 +1,4 @@
-package com.samjsddevelopment.restapitemplate.exception;
+package com.samjsddevelopment.applicationtracker.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;

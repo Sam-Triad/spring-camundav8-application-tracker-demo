@@ -1,4 +1,4 @@
-package com.samjsddevelopment.restapitemplate.config;
+package com.samjsddevelopment.applicationtracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

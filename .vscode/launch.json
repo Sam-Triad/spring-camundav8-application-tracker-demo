@@ -2,11 +2,11 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-RestapitemplateApplication<restapitemplate>",
+            "name": "Spring Boot-ApplicationTrackerApplication<applicationtracker>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.samjsddevelopment.restapitemplate.RestapitemplateApplication",
-            "projectName": "restapitemplate",
+            "mainClass": "com.samjsddevelopment.applicationtracker.ApplicationTrackerApplication",
+            "projectName": "applicationtracker",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }

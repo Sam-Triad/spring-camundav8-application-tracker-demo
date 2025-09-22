@@ -1,10 +1,10 @@
-package com.samjsddevelopment.restapitemplate.repository;
+package com.samjsddevelopment.applicationtracker.repository;
 
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.samjsddevelopment.restapitemplate.model.Parent;
+import com.samjsddevelopment.applicationtracker.model.Parent;
 
 public interface ParentRepository extends JpaRepository<Parent, UUID> {
     

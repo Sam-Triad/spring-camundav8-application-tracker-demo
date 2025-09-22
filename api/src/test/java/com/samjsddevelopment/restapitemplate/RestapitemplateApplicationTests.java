@@ -1,10 +1,10 @@
-package com.samjsddevelopment.restapitemplate;
+package com.samjsddevelopment.applicationtracker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RestapitemplateApplicationTests {
+class ApplicationTrackerApplicationTests {
 
 	@Test
 	void contextLoads() {

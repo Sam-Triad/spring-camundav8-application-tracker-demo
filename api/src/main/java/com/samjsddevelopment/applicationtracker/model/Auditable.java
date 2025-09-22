@@ -1,4 +1,4 @@
-package com.samjsddevelopment.restapitemplate.model;
+package com.samjsddevelopment.applicationtracker.model;
 
 import java.time.Instant;
 

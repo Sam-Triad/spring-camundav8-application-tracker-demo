@@ -1,16 +1,16 @@
-package com.samjsddevelopment.restapitemplate.service;
+package com.samjsddevelopment.applicationtracker.service;
 
 import java.util.UUID;
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
-import com.samjsddevelopment.restapitemplate.dto.ChildRequest;
-import com.samjsddevelopment.restapitemplate.dto.ParentRequest;
-import com.samjsddevelopment.restapitemplate.dto.ParentResponse;
-import com.samjsddevelopment.restapitemplate.mapper.ChildMapper;
-import com.samjsddevelopment.restapitemplate.mapper.ParentMapper;
-import com.samjsddevelopment.restapitemplate.repository.ParentRepository;
+import com.samjsddevelopment.applicationtracker.dto.ChildRequest;
+import com.samjsddevelopment.applicationtracker.dto.ParentRequest;
+import com.samjsddevelopment.applicationtracker.dto.ParentResponse;
+import com.samjsddevelopment.applicationtracker.mapper.ChildMapper;
+import com.samjsddevelopment.applicationtracker.mapper.ParentMapper;
+import com.samjsddevelopment.applicationtracker.repository.ParentRepository;
 
 import lombok.RequiredArgsConstructor;
 

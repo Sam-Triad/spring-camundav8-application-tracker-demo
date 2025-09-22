@@ -1,10 +1,10 @@
-package com.samjsddevelopment.restapitemplate.mapper;
+package com.samjsddevelopment.applicationtracker.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import com.samjsddevelopment.restapitemplate.dto.ChildRequest;
-import com.samjsddevelopment.restapitemplate.model.Child;
+import com.samjsddevelopment.applicationtracker.dto.ChildRequest;
+import com.samjsddevelopment.applicationtracker.model.Child;
 
 @Mapper(unmappedSourcePolicy = ReportingPolicy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ChildMapper {

@@ -1,12 +1,12 @@
-package com.samjsddevelopment.restapitemplate.controller;
+package com.samjsddevelopment.applicationtracker.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.samjsddevelopment.restapitemplate.dto.ChildRequest;
-import com.samjsddevelopment.restapitemplate.dto.ParentRequest;
-import com.samjsddevelopment.restapitemplate.dto.ParentResponse;
-import com.samjsddevelopment.restapitemplate.service.ParentService;
+import com.samjsddevelopment.applicationtracker.dto.ChildRequest;
+import com.samjsddevelopment.applicationtracker.dto.ParentRequest;
+import com.samjsddevelopment.applicationtracker.dto.ParentResponse;
+import com.samjsddevelopment.applicationtracker.service.ParentService;
 
 import lombok.RequiredArgsConstructor;
 

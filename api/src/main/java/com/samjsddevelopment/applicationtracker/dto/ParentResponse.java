@@ -1,4 +1,4 @@
-package com.samjsddevelopment.restapitemplate.dto;
+package com.samjsddevelopment.applicationtracker.dto;
 
 import java.util.UUID;
 

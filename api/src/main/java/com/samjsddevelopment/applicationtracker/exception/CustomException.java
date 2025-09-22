@@ -1,4 +1,4 @@
-package com.samjsddevelopment.restapitemplate.exception;
+package com.samjsddevelopment.applicationtracker.exception;
 
 import lombok.experimental.StandardException;
 
