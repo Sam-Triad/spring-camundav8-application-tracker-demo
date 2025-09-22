@@ -1,12 +1,12 @@
 package com.samjsddevelopment.applicationtracker.model;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,17 +22,21 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "children")
-public class Child {
+@Table(name = "applications")
+public class Application {
 
     @Id
     @GeneratedValue
     @EqualsAndHashCode.Include
     private UUID id;
 
-    private String name;
+    private String firstName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Parent parent;
+    private String lastLame;
+
+    private LocalDate dateOfBirth;
+
+    @Lob
+    private String information;
 
 }
