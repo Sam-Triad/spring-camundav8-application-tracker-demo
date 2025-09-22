@@ -52,6 +52,7 @@ public class ApplicationService {
 
     public SubmitApplicationResponse submitApplication(UUID id) {
 
+        var application = applicationRepository.findById(id).orElseThrow();
 
         var processInstanceResult = camundaClient.newCreateInstanceCommand()
                 .bpmnProcessId(PROCESS_ID)
