@@ -2,6 +2,7 @@ package com.samjsddevelopment.applicationtracker.controller;
 
 import java.util.UUID;
 
+import com.samjsddevelopment.applicationtracker.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,14 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.samjsddevelopment.applicationtracker.dto.ApplicationDto;
-import com.samjsddevelopment.applicationtracker.dto.ApplicantDto;
-import com.samjsddevelopment.applicationtracker.dto.CreateApplicantRequest;
-import com.samjsddevelopment.applicationtracker.dto.CreateApplicationRequest;
-import com.samjsddevelopment.applicationtracker.dto.CreateReviewerRequest;
-import com.samjsddevelopment.applicationtracker.dto.ReviewerDto;
-import com.samjsddevelopment.applicationtracker.dto.SubmitApplicationResponse;
-import com.samjsddevelopment.applicationtracker.dto.UpdateApplicationRequest;
 import com.samjsddevelopment.applicationtracker.service.ApplicantService;
 import com.samjsddevelopment.applicationtracker.service.ApplicationService;
 import com.samjsddevelopment.applicationtracker.service.ReviewerService;
@@ -55,7 +48,8 @@ public class ApplicationController {
     }
 
     @PostMapping("/applications/{id}/submit")
-    public ResponseEntity<SubmitApplicationResponse> submitApplication(@PathVariable UUID id) {
-        return ResponseEntity.ok(applicationService.submitApplication(id));
+    public ResponseEntity<Void> submitApplication(@PathVariable UUID id) {
+        applicationService.submitApplication(id);
+        return ResponseEntity.accepted().build();
     }
 }

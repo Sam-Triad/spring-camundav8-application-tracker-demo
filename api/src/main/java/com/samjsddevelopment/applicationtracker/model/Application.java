@@ -36,6 +36,8 @@ public class Application {
     @EqualsAndHashCode.Include
     private UUID id;
 
+    private long processInstanceKey;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Applicant applicant;
 
