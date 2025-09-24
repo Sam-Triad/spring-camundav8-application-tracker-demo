@@ -2,12 +2,15 @@ package com.samjsddevelopment.applicationtracker.service;
 
 import java.util.UUID;
 
-import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
 import com.samjsddevelopment.applicationtracker.dto.ApplicationDto;
 import com.samjsddevelopment.applicationtracker.dto.CreateApplicationRequest;
 import com.samjsddevelopment.applicationtracker.dto.UpdateApplicationRequest;
+import com.samjsddevelopment.applicationtracker.exception.CamundaStateException;
+import com.samjsddevelopment.applicationtracker.exception.NotFoundException;
 import com.samjsddevelopment.applicationtracker.mapper.ApplicationMapper;
 import com.samjsddevelopment.applicationtracker.model.Application;
 import com.samjsddevelopment.applicationtracker.repository.ApplicantRepository;
@@ -32,7 +35,8 @@ public class ApplicationService {
     @Transactional
     public ApplicationDto createApplication(CreateApplicationRequest request) {
         var applicant = applicantRepository.findById(request.applicantId())
-                .orElseThrow(() -> new EntityNotFoundException("Applicant not found with id: " + request.applicantId()));
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Applicant not found with id: " + request.applicantId()));
 
         var application = Application.builder()
                 .applicant(applicant)
@@ -60,32 +64,31 @@ public class ApplicationService {
         return applicationMapper.toDto(updatedApplication);
     }
 
-public void submitApplication(UUID id) {
-    var application = applicationRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Application not found with id: " + id));
-    try {
-        // Search for user tasks for the given process instance key
+    public void submitApplication(UUID id) {
+        var application = applicationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Application not found with id: " + id));
+
+        // Find user task and get key
         var results = camundaClient.newUserTaskQuery()
                 .filter(f -> f.processInstanceKey(application.getProcessInstanceKey()))
                 .send()
                 .join();
-
         var items = results.items();
         if (items == null || items.isEmpty()) {
-            throw new IllegalStateException("No user task found for process instance: " + application.getProcessInstanceKey());
+            throw new CamundaStateException(
+                    "No user task found for process instance: " + application.getProcessInstanceKey());
         }
-
-        // Complete the first user task found
         var userTaskKey = items.getFirst().getKey();
-        camundaClient.newUserTaskAssignCommand(userTaskKey).assignee("TEST").send().join();
+
+        // Assign and complete user task
+        camundaClient.newUserTaskAssignCommand(userTaskKey)
+                .assignee("TEST")
+                .send()
+                .join(); // TODO: Set user id from rest request
         camundaClient.newUserTaskCompleteCommand(userTaskKey)
                 .send()
                 .join();
 
-    } catch (Exception e) {
-        // Handle and log the error appropriately
-        throw new RuntimeException("Failed to complete user task for application id: " + id, e);
     }
-}
-    
+
 }
