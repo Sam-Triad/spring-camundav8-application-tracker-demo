@@ -2,8 +2,6 @@ package com.samjsddevelopment.applicationtracker.service;
 
 import java.util.UUID;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Service;
 
 import com.samjsddevelopment.applicationtracker.dto.ApplicationDto;

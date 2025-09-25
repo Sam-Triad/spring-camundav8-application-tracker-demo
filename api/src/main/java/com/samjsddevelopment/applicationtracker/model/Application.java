@@ -4,7 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.samjsddevelopment.applicationtracker.enums.ApplicationStatusEnum;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -52,5 +56,8 @@ public class Application {
 
     @Lob
     private String information;
+
+    @Enumerated(EnumType.STRING)
+    private ApplicationStatusEnum applicationStatus;
 
 }
