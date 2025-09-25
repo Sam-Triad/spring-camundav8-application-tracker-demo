@@ -29,6 +29,7 @@
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition externalReference="verifier_approval" />
+        <zeebe:assignmentDefinition candidateGroups="Verifier" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1dq9tfm</bpmn:incoming>
       <bpmn:outgoing>Flow_0qlbqmj</bpmn:outgoing>
@@ -37,6 +38,7 @@
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition externalReference="administrator_level_one_approval" />
+        <zeebe:assignmentDefinition candidateGroups="First_Level_Admin" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0apvzwj</bpmn:incoming>
       <bpmn:outgoing>Flow_18w4m93</bpmn:outgoing>
@@ -177,14 +179,6 @@
           <dc:Bounds x="1126" y="122" width="43" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ew1wyg_di" bpmnElement="Flow_0ew1wyg">
-        <di:waypoint x="995" y="350" />
-        <di:waypoint x="1300" y="350" />
-        <di:waypoint x="1300" y="255" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1126" y="363" width="43" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_146fxoy_di" bpmnElement="Flow_146fxoy">
         <di:waypoint x="970" y="165" />
         <di:waypoint x="970" y="230" />
@@ -199,6 +193,14 @@
         <di:waypoint x="1082" y="230" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="976" y="255" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ew1wyg_di" bpmnElement="Flow_0ew1wyg">
+        <di:waypoint x="995" y="350" />
+        <di:waypoint x="1300" y="350" />
+        <di:waypoint x="1300" y="255" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1126" y="363" width="43" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
