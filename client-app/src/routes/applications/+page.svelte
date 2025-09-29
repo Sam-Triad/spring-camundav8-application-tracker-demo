@@ -1,0 +1,1 @@
+<p>Hello Protected Endpoint</p>
