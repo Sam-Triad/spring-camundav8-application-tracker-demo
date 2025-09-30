@@ -272,6 +272,18 @@ services:
       KEYCLOAK_USERS_0_ROLES_5: "Web Modeler Admin"
       KEYCLOAK_USERS_0_ROLES_6: "Zeebe"
 
+      KEYCLOAK_USERS_1_USERNAME: "verifier"
+      KEYCLOAK_USERS_1_PASSWORD: "verifier"
+      KEYCLOAK_USERS_1_FIRST_NAME: "verifier"
+      KEYCLOAK_USERS_1_EMAIL: "verifier@triad.co.uk"
+      KEYCLOAK_USERS_1_ROLES_0: "Identity"
+      KEYCLOAK_USERS_1_ROLES_1: "Optimize"
+      KEYCLOAK_USERS_1_ROLES_2: "Operate"
+      KEYCLOAK_USERS_1_ROLES_3: "Tasklist"
+      KEYCLOAK_USERS_1_ROLES_4: "Web Modeler"
+      KEYCLOAK_USERS_1_ROLES_5: "Web Modeler Admin"
+      KEYCLOAK_USERS_1_ROLES_6: "Zeebe"
+
       KEYCLOAK_CLIENTS_0_NAME: Zeebe
       KEYCLOAK_CLIENTS_0_ID: ${ZEEBE_CLIENT_ID}
       KEYCLOAK_CLIENTS_0_SECRET: ${ZEEBE_CLIENT_SECRET}
@@ -289,12 +301,12 @@ services:
       KEYCLOAK_CLIENTS_0_PERMISSIONS_5_RESOURCE_SERVER_ID: operate-api
       KEYCLOAK_CLIENTS_0_PERMISSIONS_5_DEFINITION: read:*
 
-      KEYCLOAK_CLIENTS_1_NAME: "SvelteKit Frontend"
-      KEYCLOAK_CLIENTS_1_ID: "sveltekit-frontend"
+      KEYCLOAK_CLIENTS_1_NAME: "Frontend Client"
+      KEYCLOAK_CLIENTS_1_ID: "frontend-client"
       KEYCLOAK_CLIENTS_1_SECRET: "not-used-for-public-clients"
       KEYCLOAK_CLIENTS_1_TYPE: "CONFIDENTIAL"
       KEYCLOAK_CLIENTS_1_ROOT_URL: "http://localhost:5173"
-      KEYCLOAK_CLIENTS_1_REDIRECT_URIS_0: "http://localhost:5173/*"
+      KEYCLOAK_CLIENTS_1_REDIRECT_URIS_0: "/*" # Not sure if this is a bug, but this seems to be appended to the root url. May need to update in the future if they fix it.
       KEYCLOAK_CLIENTS_1_WEB_ORIGINS_0: "http://localhost:5173"
       KEYCLOAK_CLIENTS_1_PERMISSIONS_0_RESOURCE_SERVER_ID: zeebe-api
       KEYCLOAK_CLIENTS_1_PERMISSIONS_0_DEFINITION: write:*
