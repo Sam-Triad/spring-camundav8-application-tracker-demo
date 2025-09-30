@@ -307,7 +307,9 @@ services:
       KEYCLOAK_CLIENTS_1_TYPE: "CONFIDENTIAL"
       KEYCLOAK_CLIENTS_1_ROOT_URL: "http://localhost:5173"
       KEYCLOAK_CLIENTS_1_REDIRECT_URIS_0: "/*" # Not sure if this is a bug, but this seems to be appended to the root url. May need to update in the future if they fix it.
+      KEYCLOAK_CLIENTS_1_REDIRECT_URIS_1: "http://localhost:8080/swagger-ui/oauth2-redirect.html"
       KEYCLOAK_CLIENTS_1_WEB_ORIGINS_0: "http://localhost:5173"
+      KEYCLOAK_CLIENTS_1_WEB_ORIGINS_1: "http://localhost:8080"
       KEYCLOAK_CLIENTS_1_PERMISSIONS_0_RESOURCE_SERVER_ID: zeebe-api
       KEYCLOAK_CLIENTS_1_PERMISSIONS_0_DEFINITION: write:*
       KEYCLOAK_CLIENTS_1_PERMISSIONS_1_RESOURCE_SERVER_ID: tasklist-api

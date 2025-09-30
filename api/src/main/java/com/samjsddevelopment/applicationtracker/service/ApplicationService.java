@@ -18,6 +18,8 @@ import io.camunda.zeebe.client.ZeebeClient;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
@@ -88,5 +90,11 @@ public class ApplicationService {
                 .join();
 
     }
+
+        public Page<ApplicationDto> listApplications(Pageable pageable) {
+                var page = applicationRepository.findAll(pageable);
+                var dtos = page.map(applicationMapper::toDto);
+                return dtos;
+        }
 
 }
