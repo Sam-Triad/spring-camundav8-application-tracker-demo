@@ -296,8 +296,8 @@ services:
       KEYCLOAK_USERS_2_ROLES_5: "Web Modeler Admin"
       KEYCLOAK_USERS_2_ROLES_6: "Zeebe"
 
-      KEYCLOAK_USERS_3_USERNAME: "bob"
-      KEYCLOAK_USERS_3_PASSWORD: "bob"
+      KEYCLOAK_USERS_3_USERNAME: "test_applicant"
+      KEYCLOAK_USERS_3_PASSWORD: "test_applicant"
       KEYCLOAK_USERS_3_FIRST_NAME: "Bob"
       KEYCLOAK_USERS_3_EMAIL: "bob@triad.co.uk"
 
@@ -414,6 +414,21 @@ services:
       - identity-network
     depends_on:
       - postgres
+  
+  keycloak-post-setup:
+    image: curlimages/curl:latest
+    container_name: keycloak-post-setup
+    volumes:
+      - ./initialise-keycloak.sh:/initialise-keycloak.sh
+    command: sh /initialise-keycloak.sh
+    networks:
+      - identity-network
+      - camunda-platform
+    depends_on:
+      identity:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
 
   elasticsearch: # https://hub.docker.com/_/elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
