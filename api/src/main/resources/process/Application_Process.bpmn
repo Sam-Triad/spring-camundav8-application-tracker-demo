@@ -9,7 +9,7 @@
     <bpmn:sequenceFlow id="Flow_0v0pvmi" sourceRef="Activity_1hgz4gn" targetRef="Gateway_1dvfaqj" />
     <bpmn:sequenceFlow id="Flow_1dq9tfm" sourceRef="Gateway_1dvfaqj" targetRef="Verifier_Approval" />
     <bpmn:sequenceFlow id="Flow_0apvzwj" sourceRef="Gateway_1dvfaqj" targetRef="First_Level_Administrator_Approval" />
-    <bpmn:sequenceFlow id="Flow_18w4m93" sourceRef="First_Level_Administrator_Approval" targetRef="Gateway_1yk9og6" />
+    <bpmn:sequenceFlow id="Flow_18w4m93" sourceRef="First_Level_Administrator_Approval" targetRef="First_Level_Admin_Approved_Decision" />
     <bpmn:parallelGateway id="Gateway_1dvfaqj">
       <bpmn:incoming>Flow_0v0pvmi</bpmn:incoming>
       <bpmn:outgoing>Flow_1dq9tfm</bpmn:outgoing>
@@ -20,16 +20,25 @@
       <bpmn:incoming>Flow_0ew1wyg</bpmn:incoming>
       <bpmn:outgoing>Flow_18ad2gt</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:endEvent id="Event_1fkh5y0" name="Application Approved">
+    <bpmn:endEvent id="Application_Approved" name="Application Approved">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:output source="=true" target="applicationApproved" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_18ad2gt</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_18ad2gt" sourceRef="Gateway_0f2se5j" targetRef="Event_1fkh5y0" />
+    <bpmn:sequenceFlow id="Flow_18ad2gt" sourceRef="Gateway_0f2se5j" targetRef="Application_Approved" />
     <bpmn:sequenceFlow id="Flow_0qlbqmj" sourceRef="Verifier_Approval" targetRef="Gateway_0fg7zn6" />
     <bpmn:userTask id="Verifier_Approval" name="Verifier Approval">
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition externalReference="verifier_approval" />
         <zeebe:assignmentDefinition candidateGroups="Verifier" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=null" target="approved" />
+          <zeebe:output source="=approved" target="verifierApproved" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1dq9tfm</bpmn:incoming>
       <bpmn:outgoing>Flow_0qlbqmj</bpmn:outgoing>
@@ -39,6 +48,10 @@
         <zeebe:userTask />
         <zeebe:formDefinition externalReference="administrator_level_one_approval" />
         <zeebe:assignmentDefinition candidateGroups="First_Level_Admin" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=null" target="approved" />
+          <zeebe:output source="=approved" target="firstLevelAdminApproved" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0apvzwj</bpmn:incoming>
       <bpmn:outgoing>Flow_18w4m93</bpmn:outgoing>
@@ -58,19 +71,24 @@
     <bpmn:sequenceFlow id="Flow_0ejqmk7" name="Approval" sourceRef="Gateway_0fg7zn6" targetRef="Gateway_0f2se5j">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(verifierApproved = true)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:exclusiveGateway id="Gateway_1yk9og6" name="1st Level Admin Approved?">
+    <bpmn:exclusiveGateway id="First_Level_Admin_Approved_Decision" name="1st Level Admin Approved?">
       <bpmn:incoming>Flow_18w4m93</bpmn:incoming>
       <bpmn:outgoing>Flow_0rjys2j</bpmn:outgoing>
       <bpmn:outgoing>Flow_0ew1wyg</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="Event_14ioqlh" name="Application Rejected">
+    <bpmn:endEvent id="Application_Rejected" name="Application Rejected">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:output source="=false" target="applicationApproved" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_146fxoy</bpmn:incoming>
       <bpmn:incoming>Flow_0rjys2j</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_146fxoy" name="Rejection" sourceRef="Gateway_0fg7zn6" targetRef="Event_14ioqlh">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(verifierApproved = false)</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="Flow_146fxoy" name="Rejection" sourceRef="Gateway_0fg7zn6" targetRef="Application_Rejected">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(approved = false)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0rjys2j" name="Rejection" sourceRef="Gateway_1yk9og6" targetRef="Event_14ioqlh">
+    <bpmn:sequenceFlow id="Flow_0rjys2j" name="Rejection" sourceRef="First_Level_Admin_Approved_Decision" targetRef="Application_Rejected">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(firstLevelAdminApproved = false)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="Submit_Application" name="Submit Application">
@@ -82,7 +100,7 @@
       <bpmn:incoming>Flow_1276i95</bpmn:incoming>
       <bpmn:outgoing>Flow_1p5wmdm</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_0ew1wyg" name="Approval" sourceRef="Gateway_1yk9og6" targetRef="Gateway_0f2se5j">
+    <bpmn:sequenceFlow id="Flow_0ew1wyg" name="Approval" sourceRef="First_Level_Admin_Approved_Decision" targetRef="Gateway_0f2se5j">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(firstLevelAdminApproved = true)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
   </bpmn:process>
@@ -100,7 +118,7 @@
       <bpmndi:BPMNShape id="Gateway_0bhoymo_di" bpmnElement="Gateway_0f2se5j">
         <dc:Bounds x="1275" y="205" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1fkh5y0_di" bpmnElement="Event_1fkh5y0">
+      <bpmndi:BPMNShape id="Event_1fkh5y0_di" bpmnElement="Application_Approved">
         <dc:Bounds x="1382" y="212" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1373" y="255" width="54" height="27" />
@@ -123,13 +141,13 @@
           <dc:Bounds x="925" y="85" width="90" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1yk9og6_di" bpmnElement="Gateway_1yk9og6" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="Gateway_1yk9og6_di" bpmnElement="First_Level_Admin_Approved_Decision" isMarkerVisible="true">
         <dc:Bounds x="945" y="325" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="932" y="382" width="78" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_14ioqlh_di" bpmnElement="Event_14ioqlh">
+      <bpmndi:BPMNShape id="Event_14ioqlh_di" bpmnElement="Application_Rejected">
         <dc:Bounds x="1082" y="212" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1073" y="255" width="54" height="27" />
@@ -185,7 +203,7 @@
         <di:waypoint x="970" y="230" />
         <di:waypoint x="1082" y="230" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="976" y="203" width="47" height="14" />
+          <dc:Bounds x="977" y="203" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0rjys2j_di" bpmnElement="Flow_0rjys2j">
@@ -193,7 +211,7 @@
         <di:waypoint x="970" y="230" />
         <di:waypoint x="1082" y="230" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="976" y="255" width="47" height="14" />
+          <dc:Bounds x="977" y="255" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ew1wyg_di" bpmnElement="Flow_0ew1wyg">

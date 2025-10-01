@@ -3,6 +3,7 @@ package com.samjsddevelopment.applicationtracker.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.samjsddevelopment.applicationtracker.dto.ApprovalDecisionRequest;
 import com.samjsddevelopment.applicationtracker.dto.UserTaskDto;
 import com.samjsddevelopment.applicationtracker.service.TaskService;
 
@@ -19,6 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -47,5 +52,13 @@ public class TaskController {
 
         return ResponseEntity.ok(taskService.getAvailableTasks(userGroups));
     }
+
+    @PostMapping("/decide-approval")
+    public ResponseEntity<Void> decideApproval(@AuthenticationPrincipal Jwt jwt, @RequestBody ApprovalDecisionRequest approvalDecisionRequest) {
+        var userId = jwt.getClaimAsString("preferred_username");
+        taskService.makeApplicationDecision(userId, approvalDecisionRequest.userTaskId(), approvalDecisionRequest.approved());
+        return ResponseEntity.ok().build();
+    }
+    
 
 }
