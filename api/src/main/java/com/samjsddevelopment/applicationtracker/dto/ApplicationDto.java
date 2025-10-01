@@ -4,6 +4,6 @@ import java.util.UUID;
 
 public record ApplicationDto(
         UUID id,
-        UUID applicantId,
+        String applicantUsername,
         String information) {
 }

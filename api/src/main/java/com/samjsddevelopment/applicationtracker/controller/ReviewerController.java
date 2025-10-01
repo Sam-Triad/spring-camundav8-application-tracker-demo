@@ -21,9 +21,9 @@ public class ReviewerController {
 
     private final ReviewerService reviewerService;
 
-    @PostMapping
-    @Operation(summary = "Create a new reviewer")
-    public ResponseEntity<ReviewerDto> createReviewer(@RequestBody CreateReviewerRequest request) {
-        return new ResponseEntity<>(reviewerService.createReviewer(request), HttpStatus.CREATED);
-    }
+    // @PostMapping
+    // @Operation(summary = "Create a new reviewer")
+    // public ResponseEntity<ReviewerDto> createReviewer(@RequestBody CreateReviewerRequest request) {
+    //     return new ResponseEntity<>(reviewerService.createReviewer(request), HttpStatus.CREATED);
+    // }
 }

@@ -10,17 +10,18 @@ import org.springframework.stereotype.Service;
 import com.samjsddevelopment.applicationtracker.dto.ApplicationDto;
 import com.samjsddevelopment.applicationtracker.dto.CreateApplicationRequest;
 import com.samjsddevelopment.applicationtracker.dto.UpdateApplicationRequest;
+import com.samjsddevelopment.applicationtracker.enums.ApplicationStatusEnum;
 import com.samjsddevelopment.applicationtracker.exception.CamundaStateException;
 import com.samjsddevelopment.applicationtracker.exception.NotFoundException;
 import com.samjsddevelopment.applicationtracker.mapper.ApplicationMapper;
 import com.samjsddevelopment.applicationtracker.model.Application;
-import com.samjsddevelopment.applicationtracker.repository.ApplicantRepository;
 import com.samjsddevelopment.applicationtracker.repository.ApplicationRepository;
 
 import io.camunda.zeebe.client.ZeebeClient;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -29,28 +30,23 @@ import org.springframework.data.domain.Pageable;
 public class ApplicationService {
 
         private final ApplicationRepository applicationRepository;
-        private final ApplicantRepository applicantRepository;
         private final ApplicationMapper applicationMapper;
         private final ZeebeClient camundaClient;
 
-        private static final String PROCESS_ID = "Application_Process";
+        @Value("${processes.application-process-id}")
+        private String processId;
 
         @Transactional
         public ApplicationDto createApplication(CreateApplicationRequest request) {
-                var applicant = applicantRepository.findById(request.applicantId())
-                                .orElseThrow(
-                                                () -> new EntityNotFoundException("Applicant not found with id: "
-                                                                + request.applicantId()));
-
                 var application = Application.builder()
-                                .applicant(applicant)
+                                .applicantUsername(request.applicantUsername())
                                 .build();
                 var savedApplication = applicationRepository.save(application);
 
                 var processInstanceResult = camundaClient.newCreateInstanceCommand()
-                                .bpmnProcessId(PROCESS_ID)
+                                .bpmnProcessId(processId)
                                 .latestVersion()
-                                .variables(java.util.Map.of("applicationId", savedApplication.getId().toString()))
+                                .variables(Map.of("applicationId", savedApplication.getId().toString()))
                                 .send()
                                 .join();
                 application.setProcessInstanceKey(processInstanceResult.getProcessInstanceKey());
@@ -62,6 +58,10 @@ public class ApplicationService {
         public ApplicationDto updateApplication(UUID id, UpdateApplicationRequest request) {
                 var application = applicationRepository.findById(id)
                                 .orElseThrow(() -> new EntityNotFoundException("Application not found with id: " + id));
+                
+                if (!application.getApplicationStatus().equals(ApplicationStatusEnum.WAITING_FOR_SUBMISSION)) {
+                        throw new CamundaStateException("Application must be waiting for submission to update.");
+                }
 
                 application.setInformation(request.information());
                 var updatedApplication = applicationRepository.save(application);
@@ -89,7 +89,7 @@ public class ApplicationService {
                 camundaClient.newUserTaskAssignCommand(userTaskKey)
                                 .assignee(userId)
                                 .send()
-                                .join(); // TODO: Set user id from rest request
+                                .join();
 
                 Map<String, Object> variables = new HashMap<>();
                 variables.put("completedBy", userId);

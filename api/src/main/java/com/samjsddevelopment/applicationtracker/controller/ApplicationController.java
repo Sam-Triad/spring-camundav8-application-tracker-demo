@@ -18,8 +18,12 @@ import com.samjsddevelopment.applicationtracker.dto.ApplicationDto;
 import com.samjsddevelopment.applicationtracker.dto.CreateApplicationRequest;
 import com.samjsddevelopment.applicationtracker.dto.UpdateApplicationRequest;
 import com.samjsddevelopment.applicationtracker.service.ApplicationService;
+
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -54,9 +58,15 @@ public class ApplicationController {
     }
 
     @GetMapping
-    @Operation(summary = "List applications (paginated)")
-    public ResponseEntity<Page<ApplicationDto>> listApplications(Pageable pageable) {
-        var page = applicationService.listApplications(pageable);
+    @Operation(summary = "List applications (paginated), sorted by creation date ascending")
+    public ResponseEntity<Page<ApplicationDto>> listApplications(
+            @ParameterObject Pageable pageable) {
+        var sortedPageable = org.springframework.data.domain.PageRequest.of(
+            pageable.getPageNumber(),
+            pageable.getPageSize(),
+            Sort.by(Direction.ASC, "createdDate")
+        );
+        var page = applicationService.listApplications(sortedPageable);
         return ResponseEntity.ok(page);
     }
 }

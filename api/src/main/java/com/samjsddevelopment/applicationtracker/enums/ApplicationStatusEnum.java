@@ -1,7 +1,8 @@
 package com.samjsddevelopment.applicationtracker.enums;
 
 public enum ApplicationStatusEnum {
-    IN_PROGRESS,
+    WAITING_FOR_SUBMISSION,
+    IN_REVIEW,
     APPROVED,
     REJECTED
 }

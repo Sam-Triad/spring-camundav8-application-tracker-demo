@@ -6,17 +6,13 @@ import java.util.UUID;
 
 import com.samjsddevelopment.applicationtracker.enums.ApplicationStatusEnum;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,12 +24,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "applications")
-public class Application {
+public class Application extends Auditable{
 
     @Id
     @GeneratedValue
@@ -42,22 +38,17 @@ public class Application {
 
     private long processInstanceKey;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Applicant applicant;
+    private String applicantUsername;
 
-    @ManyToMany
-    @JoinTable(
-        name = "application_reviewers",
-        joinColumns = @JoinColumn(name = "application_id"),
-        inverseJoinColumns = @JoinColumn(name = "reviewer_id")
-    )
+    @ElementCollection
     @Builder.Default
-    private Set<Reviewer> reviewers = new HashSet<>();
+    private Set<UUID> reviewerIds = new HashSet<>();
 
     @Lob
     private String information;
 
     @Enumerated(EnumType.STRING)
-    private ApplicationStatusEnum applicationStatus;
+    @Builder.Default
+    private ApplicationStatusEnum applicationStatus = ApplicationStatusEnum.WAITING_FOR_SUBMISSION;
 
 }

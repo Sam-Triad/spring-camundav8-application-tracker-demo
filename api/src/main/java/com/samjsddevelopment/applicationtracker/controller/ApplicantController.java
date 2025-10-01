@@ -20,10 +20,10 @@ public class ApplicantController {
 
     private final ApplicantService applicantService;
 
-    @PostMapping
-    @Operation(summary = "Create a new applicant")
-    public ResponseEntity<ApplicantDto> createApplicant(@RequestBody CreateApplicantRequest request) {
-        return new ResponseEntity<>(applicantService.createApplicant(request), HttpStatus.CREATED);
-    }
+    // @PostMapping
+    // @Operation(summary = "Create a new applicant")
+    // public ResponseEntity<ApplicantDto> createApplicant(@RequestBody CreateApplicantRequest request) {
+    //     return new ResponseEntity<>(applicantService.createApplicant(request), HttpStatus.CREATED);
+    // }
 
 }
