@@ -4,12 +4,12 @@
     <bpmn:startEvent id="StartEvent_1" name="Create Application">
       <bpmn:outgoing>Flow_1276i95</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_1276i95" sourceRef="StartEvent_1" targetRef="Activity_1oyn3td" />
-    <bpmn:sequenceFlow id="Flow_1p5wmdm" sourceRef="Activity_1oyn3td" targetRef="Activity_1hgz4gn" />
+    <bpmn:sequenceFlow id="Flow_1276i95" sourceRef="StartEvent_1" targetRef="Submit_Application" />
+    <bpmn:sequenceFlow id="Flow_1p5wmdm" sourceRef="Submit_Application" targetRef="Activity_1hgz4gn" />
     <bpmn:sequenceFlow id="Flow_0v0pvmi" sourceRef="Activity_1hgz4gn" targetRef="Gateway_1dvfaqj" />
-    <bpmn:sequenceFlow id="Flow_1dq9tfm" sourceRef="Gateway_1dvfaqj" targetRef="Activity_0w6wnua" />
-    <bpmn:sequenceFlow id="Flow_0apvzwj" sourceRef="Gateway_1dvfaqj" targetRef="Activity_018y8ud" />
-    <bpmn:sequenceFlow id="Flow_18w4m93" sourceRef="Activity_018y8ud" targetRef="Gateway_1yk9og6" />
+    <bpmn:sequenceFlow id="Flow_1dq9tfm" sourceRef="Gateway_1dvfaqj" targetRef="Verifier_Approval" />
+    <bpmn:sequenceFlow id="Flow_0apvzwj" sourceRef="Gateway_1dvfaqj" targetRef="First_Level_Administrator_Approval" />
+    <bpmn:sequenceFlow id="Flow_18w4m93" sourceRef="First_Level_Administrator_Approval" targetRef="Gateway_1yk9og6" />
     <bpmn:parallelGateway id="Gateway_1dvfaqj">
       <bpmn:incoming>Flow_0v0pvmi</bpmn:incoming>
       <bpmn:outgoing>Flow_1dq9tfm</bpmn:outgoing>
@@ -24,8 +24,8 @@
       <bpmn:incoming>Flow_18ad2gt</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_18ad2gt" sourceRef="Gateway_0f2se5j" targetRef="Event_1fkh5y0" />
-    <bpmn:sequenceFlow id="Flow_0qlbqmj" sourceRef="Activity_0w6wnua" targetRef="Gateway_0fg7zn6" />
-    <bpmn:userTask id="Activity_0w6wnua" name="Verifier Approval">
+    <bpmn:sequenceFlow id="Flow_0qlbqmj" sourceRef="Verifier_Approval" targetRef="Gateway_0fg7zn6" />
+    <bpmn:userTask id="Verifier_Approval" name="Verifier Approval">
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition externalReference="verifier_approval" />
@@ -34,7 +34,7 @@
       <bpmn:incoming>Flow_1dq9tfm</bpmn:incoming>
       <bpmn:outgoing>Flow_0qlbqmj</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_018y8ud" name="First Level Administrator Approval">
+    <bpmn:userTask id="First_Level_Administrator_Approval" name="First Level Administrator Approval">
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition externalReference="administrator_level_one_approval" />
@@ -73,7 +73,7 @@
     <bpmn:sequenceFlow id="Flow_0rjys2j" name="Rejection" sourceRef="Gateway_1yk9og6" targetRef="Event_14ioqlh">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(firstLevelAdminApproved = false)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Activity_1oyn3td" name="Submit Application">
+    <bpmn:userTask id="Submit_Application" name="Submit Application">
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition externalReference="submit_application" />
@@ -106,11 +106,11 @@
           <dc:Bounds x="1373" y="255" width="54" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0nbk4gx_di" bpmnElement="Activity_0w6wnua">
+      <bpmndi:BPMNShape id="Activity_0nbk4gx_di" bpmnElement="Verifier_Approval">
         <dc:Bounds x="780" y="100" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0ls83nw_di" bpmnElement="Activity_018y8ud">
+      <bpmndi:BPMNShape id="Activity_0ls83nw_di" bpmnElement="First_Level_Administrator_Approval">
         <dc:Bounds x="780" y="310" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
@@ -135,7 +135,7 @@
           <dc:Bounds x="1073" y="255" width="54" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_17w5oui_di" bpmnElement="Activity_1oyn3td">
+      <bpmndi:BPMNShape id="Activity_17w5oui_di" bpmnElement="Submit_Application">
         <dc:Bounds x="350" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1276i95_di" bpmnElement="Flow_1276i95">
