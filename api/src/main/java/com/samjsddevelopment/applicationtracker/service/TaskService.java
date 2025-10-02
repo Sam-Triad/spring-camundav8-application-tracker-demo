@@ -52,16 +52,32 @@ public class TaskService {
                 .filter(f -> f.assignee(userId).key(userTaskId).state("CREATED"))
                 .send()
                 .join().items();
-        
+
         if (userTaskList.isEmpty() || userTaskList == null) {
             throw new NotFoundException("A user task assigned to the current user was not found");
         }
         if (userTaskList.size() > 1) {
             throw new CamundaStateException("More than one user task was found");
-        }        
+        }
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("approved", approved);
         camundaClient.newUserTaskCompleteCommand(userTaskId).variables(variables).send().join();
+    }
+
+    public void claimTask(String userId, long userTaskId) {
+        var userTaskList = camundaClient.newUserTaskQuery()
+                .filter(f -> f.key(userTaskId))
+                .send()
+                .join().items();
+
+        if (userTaskList.isEmpty() || userTaskList == null) {
+            throw new NotFoundException("A user task assigned to the current user was not found");
+        }
+        if (userTaskList.size() > 1) {
+            throw new CamundaStateException("More than one user task was found");
+        }
+
+        camundaClient.newUserTaskAssignCommand(userTaskId).assignee(userId).send().join();
     }
 }

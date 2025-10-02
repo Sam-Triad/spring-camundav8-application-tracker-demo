@@ -57,8 +57,16 @@ public class TaskController {
     public ResponseEntity<Void> decideApproval(@AuthenticationPrincipal Jwt jwt, @RequestBody ApprovalDecisionRequest approvalDecisionRequest) {
         var userId = jwt.getClaimAsString("preferred_username");
         taskService.makeApplicationDecision(userId, approvalDecisionRequest.userTaskId(), approvalDecisionRequest.approved());
+
         return ResponseEntity.ok().build();
     }
     
+    @PostMapping("/claim-task/{userTaskId}")
+    public ResponseEntity<Void> claimTask(@AuthenticationPrincipal Jwt jwt, @PathVariable long userTaskId) {
+        var userId = jwt.getClaimAsString("preferred_username");
+        taskService.claimTask(userId, userTaskId);
 
+        return ResponseEntity.ok().build();
+    }
+    
 }
