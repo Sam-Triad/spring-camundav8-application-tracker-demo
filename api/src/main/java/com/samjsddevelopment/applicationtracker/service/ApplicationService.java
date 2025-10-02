@@ -20,11 +20,14 @@ import com.samjsddevelopment.applicationtracker.repository.ApplicationRepository
 import io.camunda.zeebe.client.ZeebeClient;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApplicationService {
@@ -58,7 +61,7 @@ public class ApplicationService {
         public ApplicationDto updateApplication(UUID id, UpdateApplicationRequest request) {
                 var application = applicationRepository.findById(id)
                                 .orElseThrow(() -> new EntityNotFoundException("Application not found with id: " + id));
-                
+
                 if (!application.getApplicationStatus().equals(ApplicationStatusEnum.WAITING_FOR_SUBMISSION)) {
                         throw new CamundaStateException("Application must be waiting for submission to update.");
                 }
@@ -107,6 +110,24 @@ public class ApplicationService {
                 var page = applicationRepository.findAll(pageable);
                 var dtos = page.map(applicationMapper::toDto);
                 return dtos;
+        }
+
+        public void approveApplication(UUID applicationId) {
+                var application = applicationRepository.findById(applicationId)
+                                .orElseThrow(() -> new CamundaStateException(
+                                                "Application not found with id: " + applicationId));
+
+                log.info("Application {} approved", applicationId);
+                application.setApplicationStatus(ApplicationStatusEnum.APPROVED);
+        }
+
+        public void rejectApplication(UUID applicationId) {
+                var application = applicationRepository.findById(applicationId)
+                                .orElseThrow(() -> new CamundaStateException(
+                                                "Application not found with id: " + applicationId));
+
+                log.info("Application {} rejected", applicationId);
+                application.setApplicationStatus(ApplicationStatusEnum.REJECTED);
         }
 
 }

@@ -41,7 +41,7 @@ public class TaskService {
 
     public List<UserTaskDto> getCurrentUsersTasksInReview(String userId) {
         var results = camundaClient.newUserTaskQuery()
-                .filter(f -> f.assignee(userId))
+                .filter(f -> f.assignee(userId).state("CREATED"))
                 .send()
                 .join();
         return userTaskMapper.toDtos(results.items());

@@ -26,9 +26,9 @@
           <zeebe:output source="=true" target="applicationApproved" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_18ad2gt</bpmn:incoming>
+      <bpmn:incoming>Flow_049x0jp</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_18ad2gt" sourceRef="Gateway_0f2se5j" targetRef="Application_Approved" />
+    <bpmn:sequenceFlow id="Flow_18ad2gt" sourceRef="Gateway_0f2se5j" targetRef="Approve_Application" />
     <bpmn:sequenceFlow id="Flow_0qlbqmj" sourceRef="Verifier_Approval" targetRef="Gateway_0fg7zn6" />
     <bpmn:userTask id="Verifier_Approval" name="Verifier Approval">
       <bpmn:extensionElements>
@@ -76,19 +76,10 @@
       <bpmn:outgoing>Flow_0rjys2j</bpmn:outgoing>
       <bpmn:outgoing>Flow_0ew1wyg</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="Application_Rejected" name="Application Rejected">
-      <bpmn:extensionElements>
-        <zeebe:ioMapping>
-          <zeebe:output source="=false" target="applicationApproved" />
-        </zeebe:ioMapping>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_146fxoy</bpmn:incoming>
-      <bpmn:incoming>Flow_0rjys2j</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_146fxoy" name="Rejection" sourceRef="Gateway_0fg7zn6" targetRef="Application_Rejected">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(approved = false)</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="Flow_146fxoy" name="Rejection" sourceRef="Gateway_0fg7zn6" targetRef="Reject_Application">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(verifierApproved = false)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0rjys2j" name="Rejection" sourceRef="First_Level_Admin_Approved_Decision" targetRef="Application_Rejected">
+    <bpmn:sequenceFlow id="Flow_0rjys2j" name="Rejection" sourceRef="First_Level_Admin_Approved_Decision" targetRef="Reject_Application">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(firstLevelAdminApproved = false)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="Submit_Application" name="Submit Application">
@@ -103,6 +94,32 @@
     <bpmn:sequenceFlow id="Flow_0ew1wyg" name="Approval" sourceRef="First_Level_Admin_Approved_Decision" targetRef="Gateway_0f2se5j">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(firstLevelAdminApproved = true)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0a0ulf0" sourceRef="Reject_Application" targetRef="Application_Rejected" />
+    <bpmn:serviceTask id="Reject_Application" name="Reject Application">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="Reject_Application" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0rjys2j</bpmn:incoming>
+      <bpmn:incoming>Flow_146fxoy</bpmn:incoming>
+      <bpmn:outgoing>Flow_0a0ulf0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_049x0jp" sourceRef="Approve_Application" targetRef="Application_Approved" />
+    <bpmn:serviceTask id="Approve_Application" name="Approve Application">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="Approve_Application" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_18ad2gt</bpmn:incoming>
+      <bpmn:outgoing>Flow_049x0jp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Application_Rejected" name="Application Rejected">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:output source="=false" target="applicationApproved" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0a0ulf0</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_1pwa5ea" />
+    </bpmn:endEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Application_Process">
@@ -117,12 +134,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0bhoymo_di" bpmnElement="Gateway_0f2se5j">
         <dc:Bounds x="1275" y="205" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1fkh5y0_di" bpmnElement="Application_Approved">
-        <dc:Bounds x="1382" y="212" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1373" y="255" width="54" height="27" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0nbk4gx_di" bpmnElement="Verifier_Approval">
         <dc:Bounds x="780" y="100" width="100" height="80" />
@@ -147,14 +158,28 @@
           <dc:Bounds x="932" y="382" width="78" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_14ioqlh_di" bpmnElement="Application_Rejected">
-        <dc:Bounds x="1082" y="212" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1073" y="255" width="54" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_17w5oui_di" bpmnElement="Submit_Application">
         <dc:Bounds x="350" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0sngs35_di" bpmnElement="Reject_Application">
+        <dc:Bounds x="1060" y="190" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1fkh5y0_di" bpmnElement="Application_Approved">
+        <dc:Bounds x="1512" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1503" y="255" width="54" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16ustcd_di" bpmnElement="Approve_Application">
+        <dc:Bounds x="1370" y="190" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0d6rdtm_di" bpmnElement="Application_Rejected">
+        <dc:Bounds x="1192" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1183" y="255" width="54" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1276i95_di" bpmnElement="Flow_1276i95">
         <di:waypoint x="218" y="230" />
@@ -184,7 +209,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_18ad2gt_di" bpmnElement="Flow_18ad2gt">
         <di:waypoint x="1325" y="230" />
-        <di:waypoint x="1382" y="230" />
+        <di:waypoint x="1370" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0qlbqmj_di" bpmnElement="Flow_0qlbqmj">
         <di:waypoint x="880" y="140" />
@@ -201,17 +226,17 @@
       <bpmndi:BPMNEdge id="Flow_146fxoy_di" bpmnElement="Flow_146fxoy">
         <di:waypoint x="970" y="165" />
         <di:waypoint x="970" y="230" />
-        <di:waypoint x="1082" y="230" />
+        <di:waypoint x="1060" y="230" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="977" y="203" width="47" height="14" />
+          <dc:Bounds x="977" y="213" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0rjys2j_di" bpmnElement="Flow_0rjys2j">
         <di:waypoint x="970" y="325" />
         <di:waypoint x="970" y="230" />
-        <di:waypoint x="1082" y="230" />
+        <di:waypoint x="1060" y="230" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="977" y="255" width="47" height="14" />
+          <dc:Bounds x="977" y="243" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ew1wyg_di" bpmnElement="Flow_0ew1wyg">
@@ -221,6 +246,14 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1126" y="363" width="43" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0a0ulf0_di" bpmnElement="Flow_0a0ulf0">
+        <di:waypoint x="1160" y="230" />
+        <di:waypoint x="1192" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_049x0jp_di" bpmnElement="Flow_049x0jp">
+        <di:waypoint x="1470" y="230" />
+        <di:waypoint x="1512" y="230" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
