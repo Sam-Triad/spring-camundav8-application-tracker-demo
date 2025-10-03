@@ -21,11 +21,7 @@ const authentication: Handle = async ({ event, resolve }) => {
 		'/',
 		'/signin',
 		'/signout',
-		'/api/health',
-		'/api/health/ready',
 		'/unprotected',
-		'/unprotected/toasts',
-		'/unprotected/forms'
 	];
 
 	if (exceptions.includes(event.url.pathname)) {
