@@ -11,7 +11,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint ."
+		"lint": "prettier --check . && eslint .",
+		"copy-govuk-assets": "cp -r node_modules/govuk-frontend/dist/govuk/assets static/assets"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -44,6 +45,7 @@
 	},
 	"dependencies": {
 		"@auth/core": "^0.40.0",
-		"@auth/sveltekit": "^1.10.0"
+		"@auth/sveltekit": "^1.10.0",
+		"govuk-frontend": "^5.12.0"
 	}
 }

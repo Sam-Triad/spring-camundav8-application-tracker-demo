@@ -3,25 +3,12 @@ import { sequence } from '@sveltejs/kit/hooks';
 import { handle as authConfig } from '$lib/server/authConfig';
 import { env } from '$env/dynamic/private';
 const authentication: Handle = async ({ event, resolve }) => {
-	/**
-	 * All routes are protected by default
-	 * If you want to make exceptions, make sure to add them here
-	 *
-	 * API is protected with bearer token
-	 * Non API routes are protected over the session provided by the auth provider.
-	 */
 
-	// Exceptions (leave reason as comment why route should be public)
-	/**
-	 * "/": Landing page should be visible
-	 * "/api/health" & "/api/health/ready": API health checks for kubernetes
-	 * "/unprotected": for giving an example of a non protected route
-	 */
+	// Public routes
 	const exceptions = [
 		'/',
 		'/signin',
 		'/signout',
-		'/unprotected',
 	];
 
 	if (exceptions.includes(event.url.pathname)) {
@@ -53,7 +40,7 @@ const authentication: Handle = async ({ event, resolve }) => {
 	}
 
 	// If user is not signed in or session is no longer valid, redirect to login for all other routes
-	return redirect(303, '/auth/signin');
+	return redirect(303, '/signin');
 };
 
 // First handle authentication
