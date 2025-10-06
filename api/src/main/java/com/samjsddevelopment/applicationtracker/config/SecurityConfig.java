@@ -25,7 +25,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(allowAllCorsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**",
                                 "/actuator/health")
@@ -36,11 +36,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    CorsConfigurationSource allowAllCorsConfigurationSource() {
+    CorsConfigurationSource corsConfigSource() {
         var cors = new CorsConfiguration();
-        cors.setAllowedOrigins(List.of("*"));
+        cors.setAllowedOrigins(List.of("http://localhost:5173"));
         cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        cors.setAllowedHeaders(List.of("*"));
+        cors.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         cors.setAllowCredentials(true);
         var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", cors);
