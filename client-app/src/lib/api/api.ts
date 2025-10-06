@@ -29,8 +29,21 @@ export async function makeRequest<T>(
 	});
 
 	if (!res.ok) {
-		const body = (await res.json()) as ProblemDetails;
-		console.log("body: ", body);
+		console.error(`API request failed: ${res.status} ${res.statusText}`);
+		
+		let body: ProblemDetails;
+		try {
+			body = (await res.json()) as ProblemDetails;
+		} catch (error) {
+			body = {
+				type: 'about:blank',
+				instance: '',
+				title: res.statusText,
+				status: res.status,
+				detail: 'No additional details provided'
+			};
+		}
+		
 		throw new ApiError(body);
 	}
 
@@ -52,5 +65,15 @@ export async function getApplications(
 		url: '/applications',
 		httpMethod: HttpMethod.GET,
 		params: params
+	});
+}
+
+export async function getApplication(
+	applicationId: string,
+	config: RequestConfig
+): Promise<Application> {
+	return makeRequest<Application>(config, {
+		url: `/applications/${applicationId}`,
+		httpMethod: HttpMethod.GET
 	});
 }

@@ -28,12 +28,13 @@ import org.springframework.data.domain.Sort.Direction;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/applications")
 public class ApplicationController {
-    
+
     private final ApplicationService applicationService;
 
     @PostMapping
@@ -44,7 +45,8 @@ public class ApplicationController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an application")
-    public ResponseEntity<ApplicationDto> updateApplication(@PathVariable UUID id, @RequestBody UpdateApplicationRequest request) {
+    public ResponseEntity<ApplicationDto> updateApplication(@PathVariable UUID id,
+            @RequestBody UpdateApplicationRequest request) {
         return ResponseEntity.ok(applicationService.updateApplication(id, request));
     }
 
@@ -58,15 +60,20 @@ public class ApplicationController {
         return ResponseEntity.accepted().build();
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Get an application")
+    public ResponseEntity<ApplicationDto> getApplication(@PathVariable UUID id) {
+        return ResponseEntity.ok(applicationService.getApplication(id));
+    }
+
     @GetMapping
     @Operation(summary = "List applications (paginated), sorted by creation date ascending")
     public ResponseEntity<Page<ApplicationDto>> listApplications(
             @ParameterObject Pageable pageable) {
         var sortedPageable = PageRequest.of(
-            pageable.getPageNumber(),
-            pageable.getPageSize(),
-            Sort.by(Direction.ASC, "createdDate")
-        );
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Direction.ASC, "createdDate"));
         var page = applicationService.listApplications(sortedPageable);
         return ResponseEntity.ok(page);
     }

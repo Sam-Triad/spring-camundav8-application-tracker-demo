@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Page, Application } from '$lib/api/types';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

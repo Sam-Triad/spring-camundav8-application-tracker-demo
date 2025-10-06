@@ -130,4 +130,11 @@ public class ApplicationService {
                 application.setApplicationStatus(ApplicationStatusEnum.REJECTED);
         }
 
+        public ApplicationDto getApplication(UUID applicationId) {
+                var application = applicationRepository.findById(applicationId)
+                                .orElseThrow(() -> new CamundaStateException(
+                                                "Application not found with id: " + applicationId));
+                return applicationMapper.toDto(application);
+        }
+
 }
