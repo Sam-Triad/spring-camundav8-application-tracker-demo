@@ -21,6 +21,7 @@ import com.samjsddevelopment.applicationtracker.service.ApplicationService;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -61,7 +62,7 @@ public class ApplicationController {
     @Operation(summary = "List applications (paginated), sorted by creation date ascending")
     public ResponseEntity<Page<ApplicationDto>> listApplications(
             @ParameterObject Pageable pageable) {
-        var sortedPageable = org.springframework.data.domain.PageRequest.of(
+        var sortedPageable = PageRequest.of(
             pageable.getPageNumber(),
             pageable.getPageSize(),
             Sort.by(Direction.ASC, "createdDate")
