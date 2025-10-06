@@ -1,6 +1,5 @@
 <script lang="ts">
-	import GovHelp from "$lib/components/GovHelp.svelte";
-
+	import GovHelp from '$lib/components/GovHelp.svelte';
 </script>
 
 <div class="govuk-grid-row">
@@ -10,7 +9,7 @@
 		<p class="govuk-body-l">View and manage your applications.</p>
 
 		<a
-			href="/applications"
+			href="/protected/applicant/applications"
 			role="button"
 			draggable="false"
 			class="govuk-button govuk-button--start"
@@ -37,6 +36,6 @@
 			sections before submitting.
 		</p>
 
-		<GovHelp/>
+		<GovHelp />
 	</div>
 </div>

@@ -27,6 +27,11 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
             if (account && profile) {
                 const keycloakProfile = profile as KeycloakProfile;
                 
+                // Store access token from account
+                token.accessToken = account.access_token;
+                token.refreshToken = account.refresh_token;
+                token.expiresAt = account.expires_at;
+                
                 // Use groups from Keycloak
                 token.roles = keycloakProfile.groups || [];
             }
@@ -37,6 +42,9 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
             if (session.user) {
                 session.user.roles = (token.roles as string[]) || [];
             }
+            // Add access token to session
+            session.accessToken = token.accessToken as string;
+            
             return session;
         }
     }

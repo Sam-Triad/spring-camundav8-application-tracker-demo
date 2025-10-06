@@ -2,6 +2,7 @@ import type { DefaultSession } from '@auth/core/types';
 
 declare module '@auth/core/types' {
 	interface Session {
+		accessToken?: string;
 		user: {
 			roles?: string[];
 		} & DefaultSession['user'];
@@ -10,6 +11,9 @@ declare module '@auth/core/types' {
 
 declare module '@auth/core/jwt' {
 	interface JWT {
+		accessToken?: string;
+		refreshToken?: string;
+		expiresAt?: number;
 		roles?: string[];
 	}
 }
