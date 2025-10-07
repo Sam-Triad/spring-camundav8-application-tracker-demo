@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -76,5 +77,12 @@ public class ApplicationController {
                 Sort.by(Direction.ASC, "createdDate"));
         var page = applicationService.listApplications(sortedPageable);
         return ResponseEntity.ok(page);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete an application, including the underlying Camunda process")
+    public ResponseEntity<Void> deleteApplication(@PathVariable UUID id) {
+        applicationService.deleteApplication(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -138,4 +138,12 @@ public class ApplicationService {
                 return applicationMapper.toDto(application);
         }
 
+        public void deleteApplication(UUID id) {
+                var application = applicationRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("Application not found with id: " + id));
+                camundaClient.newCancelInstanceCommand(application.getProcessInstanceKey()).send().join();
+
+                applicationRepository.delete(application);
+        }
+
 }
