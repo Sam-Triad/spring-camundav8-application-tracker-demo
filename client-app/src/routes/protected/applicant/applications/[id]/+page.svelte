@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	let application = $derived(data.apiResponse);
+	let isSubmitting = $state(false);
 
 	function getStatusTag(status: string) {
 		switch (status) {
@@ -23,7 +25,7 @@
 
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-		<a href="/protected/applicant" class="govuk-back-link">Back to your applications</a>
+		<a href="/protected/applicant/applications" class="govuk-back-link">Back to your applications</a>
 
 		<h1 class="govuk-heading-xl govuk-!-margin-top-6">Application details</h1>
 
@@ -37,7 +39,9 @@
 
 			<div class="govuk-summary-list__row">
 				<dt class="govuk-summary-list__key">Applicant</dt>
-				<dd class="govuk-summary-list__value">{data.session?.user.name} ({application.applicantUsername})</dd>
+				<dd class="govuk-summary-list__value">
+					{data.session?.user.name} ({application.applicantUsername})
+				</dd>
 			</div>
 
 			<div class="govuk-summary-list__row">
@@ -69,7 +73,17 @@
 		</dl>
 
 		{#if application.applicationStatus === 'WAITING_FOR_SUBMISSION'}
-			<form method="POST" action="?/submit">
+			<form
+				method="POST"
+				action="?/submit"
+				use:enhance={() => {
+					isSubmitting = true;
+					return async ({ update }) => {
+						await update();
+						isSubmitting = false;
+					};
+				}}
+			>
 				<div class="govuk-warning-text govuk-!-margin-top-6">
 					<span class="govuk-warning-text__icon" aria-hidden="true">!</span>
 					<strong class="govuk-warning-text__text">
@@ -77,8 +91,13 @@
 						Once you submit your application, you will not be able to make changes.
 					</strong>
 				</div>
-				<button type="submit" class="govuk-button" data-module="govuk-button">
-					Submit application
+				<button
+					type="submit"
+					class="govuk-button"
+					data-module="govuk-button"
+					disabled={isSubmitting}
+				>
+					{isSubmitting ? 'Submitting...' : 'Submit application'}
 				</button>
 			</form>
 		{:else if application.applicationStatus === 'IN_REVIEW'}

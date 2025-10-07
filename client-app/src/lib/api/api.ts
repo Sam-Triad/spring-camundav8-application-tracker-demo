@@ -47,10 +47,26 @@ export async function makeRequest<T>(
 		throw new ApiError(body);
 	}
 
-	const data = (await res.json()) as T;
-	if (!data) throw new Error('Empty response from API');
+	const contentLength = res.headers.get('Content-Length');
+	const contentType = res.headers.get('Content-Type');
+	if (contentLength === '0' || res.status === 204 || contentType === null) {
+		return undefined as unknown as T;
+	}
+	const text = await res.text();
+	if (!text) {
+		return undefined as unknown as T;
+	}
 
-	return data;
+	if (contentType.includes('application/json')) {
+		try {
+			return JSON.parse(text) as T;
+		} catch (error) {
+			console.error('Failed to parse JSON response:', error);
+			throw new Error('Failed to parse JSON response');
+		}
+	}
+
+	throw new Error('Expected JSON response from API');
 }
 
 export async function getApplications(
@@ -96,11 +112,11 @@ export async function updateApplication(
 export async function submitApplication(
 	applicationId: string,
 	config: RequestConfig
-): Promise<Application> {
-	return makeRequest<Application>(
+): Promise<void> {
+	return makeRequest<void>(
 		config,
 		{
-			url: `/applications/${applicationId}`,
+			url: `/applications/${applicationId}/submit`,
 			httpMethod: HttpMethod.POST
 		}
 	);

@@ -58,7 +58,7 @@ public class ApplicationController {
         var userEmail = jwt.getClaimAsString("email");
 
         applicationService.submitApplication(id, userId, userEmail);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
