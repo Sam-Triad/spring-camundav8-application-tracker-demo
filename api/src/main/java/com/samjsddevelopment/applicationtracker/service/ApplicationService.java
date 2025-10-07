@@ -103,7 +103,8 @@ public class ApplicationService {
                                 .variables(variables)
                                 .send()
                                 .join();
-
+                application.setApplicationStatus(ApplicationStatusEnum.IN_REVIEW);
+                applicationRepository.save(application);
         }
 
         public Page<ApplicationDto> listApplications(Pageable pageable) {
