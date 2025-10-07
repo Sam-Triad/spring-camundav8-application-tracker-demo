@@ -30,7 +30,7 @@ export async function makeRequest<T>(
 
 	if (!res.ok) {
 		console.error(`API request failed: ${res.status} ${res.statusText}`);
-		
+
 		let body: ProblemDetails;
 		try {
 			body = (await res.json()) as ProblemDetails;
@@ -43,7 +43,7 @@ export async function makeRequest<T>(
 				detail: 'No additional details provided'
 			};
 		}
-		
+
 		throw new ApiError(body);
 	}
 
@@ -76,4 +76,32 @@ export async function getApplication(
 		url: `/applications/${applicationId}`,
 		httpMethod: HttpMethod.GET
 	});
+}
+
+export async function updateApplication(
+	applicationId: string,
+	information: string,
+	config: RequestConfig
+): Promise<Application> {
+	return makeRequest<Application>(
+		config,
+		{
+			url: `/applications/${applicationId}`,
+			httpMethod: HttpMethod.PUT
+		},
+		{ information }
+	);
+}
+
+export async function submitApplication(
+	applicationId: string,
+	config: RequestConfig
+): Promise<Application> {
+	return makeRequest<Application>(
+		config,
+		{
+			url: `/applications/${applicationId}`,
+			httpMethod: HttpMethod.POST
+		}
+	);
 }
