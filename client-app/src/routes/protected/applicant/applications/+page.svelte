@@ -43,9 +43,6 @@
 
 		{#if empty}
 			<p class="govuk-body">You have no applications.</p>
-			<a href="/applications/new" class="govuk-button" data-module="govuk-button"
-				>Start new application</a
-			>
 		{:else}
 			<p class="govuk-body">
 				You have {totalElements}

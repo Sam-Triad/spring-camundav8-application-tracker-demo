@@ -24,3 +24,8 @@ export interface PageParams {
 	size?: number;
 	sortDir?: SortDirection;
 }
+
+export interface UserTask {
+	id: number;
+	elementId: string;
+}

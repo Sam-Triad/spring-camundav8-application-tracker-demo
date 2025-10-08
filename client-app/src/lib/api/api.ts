@@ -4,7 +4,8 @@ import { buildUrl, type RequestConfig, HttpMethod, type RequestProperties } from
 import type {
 	Application,
 	Page,
-	SortDirection
+	SortDirection,
+	UserTask
 } from './types';
 
 export async function makeRequest<T>(
@@ -67,6 +68,24 @@ export async function makeRequest<T>(
 	}
 
 	throw new Error('Expected JSON response from API');
+}
+
+export async function getAvailableUserTasks(
+	config: RequestConfig
+): Promise<UserTask[]> {
+	return makeRequest<UserTask[]>(config, {
+		url: '/tasks/available',
+		httpMethod: HttpMethod.GET
+	});
+}
+
+export async function getUserTasksInReview(
+	config: RequestConfig
+): Promise<UserTask[]> {
+	return makeRequest<UserTask[]>(config, {
+		url: '/tasks/in-review',
+		httpMethod: HttpMethod.GET
+	});
 }
 
 export async function getApplications(

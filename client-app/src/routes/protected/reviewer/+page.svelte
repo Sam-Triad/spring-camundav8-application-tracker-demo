@@ -10,7 +10,7 @@
 		<p class="govuk-body-l">Review and assess applications assigned to you.</p>
 
 		<a
-			href="/review"
+			href="/protected/reviewer/applications"
 			role="button"
 			draggable="false"
 			class="govuk-button govuk-button--start"
