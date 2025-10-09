@@ -2,8 +2,18 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-	
+
 	let tasks = $derived(data.apiResponse);
+	function getStatusTag(status: string) {
+		switch (status) {
+			case 'CREATED':
+				return { text: 'Available', class: 'govuk-tag--grey' };
+			case 'COMPLETED':
+				return { text: 'Done', class: 'govuk-tag--green' };
+			default:
+				return { text: status, class: '' };
+		}
+	}
 </script>
 
 <div class="govuk-grid-row">
@@ -21,7 +31,7 @@
 			{#each tasks as task, index}
 				<div class="govuk-!-margin-bottom-8">
 					<h2 class="govuk-heading-l">
-						{task.elementId.split('_').join(' ')} 
+						{task.elementId.split('_').join(' ')}
 						<!-- <strong
 							class="govuk-tag {getStatusTag(application.applicationStatus)
 								.class} govuk-!-margin-left-2"
@@ -33,14 +43,14 @@
 					<dl class="govuk-summary-list govuk-!-margin-bottom-4">
 						<div class="govuk-summary-list__row">
 							<dt class="govuk-summary-list__key">Task ID</dt>
-							<dd class="govuk-summary-list__value">{task.id}</dd>
+							<dd class="govuk-summary-list__value">{task.key}</dd>
 						</div>
-						<!-- <div class="govuk-summary-list__row">
+						<div class="govuk-summary-list__row">
 							<dt class="govuk-summary-list__key">Status</dt>
 							<dd class="govuk-summary-list__value">
-								{getStatusTag(application.applicationStatus).text}
+								{getStatusTag(task.state).text}
 							</dd>
-						</div> -->
+						</div>
 						<!-- {#if application.information}
 							<div class="govuk-summary-list__row">
 								<dt class="govuk-summary-list__key">Information</dt>
@@ -50,7 +60,9 @@
 					</dl>
 
 					<p class="govuk-body">
-						<a href="/protected/reviewer/applications/{task.id}" class="govuk-link">View application details</a>
+						<a href="/protected/reviewer/applications/{task.key}" class="govuk-link"
+							>View application details</a
+						>
 					</p>
 				</div>
 

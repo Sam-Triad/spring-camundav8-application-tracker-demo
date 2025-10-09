@@ -26,6 +26,9 @@ export interface PageParams {
 }
 
 export interface UserTask {
-	id: number;
+	key: number;
 	elementId: string;
+	applicationId: string;
+	assigneeUsername: string;
+	state: 'CREATED' | 'COMPLETED';
 }

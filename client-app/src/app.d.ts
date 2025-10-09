@@ -5,12 +5,14 @@ declare module '@auth/core/types' {
 		accessToken?: string;
 		user: {
 			roles?: string[];
+			username?: string;
 		} & DefaultSession['user'];
 	}
 }
 
 declare module '@auth/core/jwt' {
 	interface JWT {
+		username?: string;
 		accessToken?: string;
 		refreshToken?: string;
 		expiresAt?: number;

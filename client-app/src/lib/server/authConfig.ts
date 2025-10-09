@@ -34,6 +34,7 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
                 
                 // Use groups from Keycloak
                 token.roles = keycloakProfile.groups || [];
+                token.username = keycloakProfile.preferred_username;
             }
             return token;
         },
@@ -41,6 +42,7 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
             // Send roles to the client in the session
             if (session.user) {
                 session.user.roles = (token.roles as string[]) || [];
+                session.user.username = token.username;
             }
             // Add access token to session
             session.accessToken = token.accessToken as string;

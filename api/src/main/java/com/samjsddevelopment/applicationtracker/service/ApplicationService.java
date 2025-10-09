@@ -120,6 +120,7 @@ public class ApplicationService {
 
                 log.info("Application {} approved", applicationId);
                 application.setApplicationStatus(ApplicationStatusEnum.APPROVED);
+                applicationRepository.save(application);
         }
 
         public void rejectApplication(UUID applicationId) {
@@ -129,6 +130,7 @@ public class ApplicationService {
 
                 log.info("Application {} rejected", applicationId);
                 application.setApplicationStatus(ApplicationStatusEnum.REJECTED);
+                applicationRepository.save(application);
         }
 
         public ApplicationDto getApplication(UUID applicationId) {

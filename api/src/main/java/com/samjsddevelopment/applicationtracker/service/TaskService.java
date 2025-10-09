@@ -1,17 +1,20 @@
 package com.samjsddevelopment.applicationtracker.service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.samjsddevelopment.applicationtracker.dto.UserTaskDto;
+import com.samjsddevelopment.applicationtracker.enums.TaskStateEnum;
 import com.samjsddevelopment.applicationtracker.exception.CamundaStateException;
 import com.samjsddevelopment.applicationtracker.exception.NotFoundException;
-import com.samjsddevelopment.applicationtracker.mapper.UserTaskMapper;
+import com.samjsddevelopment.applicationtracker.model.Application;
+import com.samjsddevelopment.applicationtracker.repository.ApplicationRepository;
 
 import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.api.search.response.UserTask;
@@ -22,30 +25,43 @@ import lombok.RequiredArgsConstructor;
 public class TaskService {
 
     private final ZeebeClient camundaClient;
-    private final UserTaskMapper userTaskMapper;
+    private final ApplicationRepository applicationRepository;
 
+    @Transactional(readOnly = true)
     public List<UserTaskDto> getAvailableTasks(List<String> userGroups) {
         // SDK does not support filtering by multiple user groups so make multiple
         // requests in a loop
         List<UserTask> items = new ArrayList<>();
         userGroups.forEach(group -> {
             var results = camundaClient.newUserTaskQuery()
-                    .filter(f -> f.candidateGroup(group).state("CREATED").assignee(null))
+                    .filter(f -> f.candidateGroup(group))
                     .send()
                     .join();
             items.addAll(results.items());
         });
 
-        return userTaskMapper.toDtos(items);
+        // Filter out tasks with assignees and map to DTOs
+        var test = items.stream()
+                // .filter(task -> task.getAssignee() == null || task.getAssignee().isEmpty())
+                .map(task -> {
+                    // Look up application by process instance key
+                    Application application = applicationRepository
+                            .findByProcessInstanceKey(task.getProcessInstanceKey()).orElseThrow(NotFoundException::new);
+
+                    return UserTaskDto.builder().assigneeUsername(task.getAssignee()).key(task.getKey()).state(TaskStateEnum.fromString(task.getState()))
+                            .elementId(task.getElementId()).applicationId(application.getId()).build();
+                })
+                .collect(Collectors.toList());
+        return test;
     }
 
-    public List<UserTaskDto> getCurrentUsersTasksInReview(String userId) {
-        var results = camundaClient.newUserTaskQuery()
-                .filter(f -> f.assignee(userId).state("CREATED"))
-                .send()
-                .join();
-        return userTaskMapper.toDtos(results.items());
-    }
+    // public List<UserTaskDto> getCurrentUsersTasksInReview(String userId) {
+    // var results = camundaClient.newUserTaskQuery()
+    // .filter(f -> f.assignee(userId).state("CREATED"))
+    // .send()
+    // .join();
+    // return userTaskMapper.toDtos(results.items());
+    // }
 
     public void makeApplicationDecision(String userId, long userTaskId, boolean approved) {
         var userTaskList = camundaClient.newUserTaskQuery()
@@ -80,4 +96,27 @@ public class TaskService {
 
         camundaClient.newUserTaskAssignCommand(userTaskId).assignee(userId).send().join();
     }
+
+    @Transactional(readOnly = true)
+    public UserTaskDto getTask(long key) {
+        var userTaskList = camundaClient.newUserTaskQuery()
+                .filter(f -> f.key(key))
+                .send()
+                .join().items();
+
+        if (userTaskList.isEmpty() || userTaskList == null) {
+            throw new NotFoundException("A user task assigned to the current user was not found");
+        }
+        if (userTaskList.size() > 1) {
+            throw new CamundaStateException("More than one user task was found");
+        }
+        var userTask = userTaskList.getFirst();
+        Application application = applicationRepository
+                .findByProcessInstanceKey(userTask.getProcessInstanceKey()).orElseThrow();
+
+        return UserTaskDto.builder().elementId(userTask.getElementId()).applicationId(application.getId())
+                .state(TaskStateEnum.fromString(userTask.getState()))
+                .assigneeUsername(userTask.getAssignee()).build();
+    }
+
 }

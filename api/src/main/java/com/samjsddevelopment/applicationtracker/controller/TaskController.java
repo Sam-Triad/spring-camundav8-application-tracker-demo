@@ -32,14 +32,14 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @GetMapping("/in-review")
-    @Operation(summary = "List tasks assigned to current user")
-    public ResponseEntity<List<UserTaskDto>> getTasksInReview(
-            @AuthenticationPrincipal Jwt jwt) {
-        var userId = jwt.getClaimAsString("preferred_username");
+    // @GetMapping("/in-review")
+    // @Operation(summary = "List tasks assigned to current user")
+    // public ResponseEntity<List<UserTaskDto>> getTasksInReview(
+    //         @AuthenticationPrincipal Jwt jwt) {
+    //     var userId = jwt.getClaimAsString("preferred_username");
 
-        return ResponseEntity.ok(taskService.getCurrentUsersTasksInReview(userId));
-    }
+    //     return ResponseEntity.ok(taskService.getCurrentUsersTasksInReview(userId));
+    // }
 
     @GetMapping("/available")
     @Operation(summary = "List unassigned tasks")
@@ -53,10 +53,15 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getAvailableTasks(userGroups));
     }
 
+    @GetMapping("/{key}")
+    public ResponseEntity<UserTaskDto> getTask(@PathVariable long key) {
+        return ResponseEntity.ok(taskService.getTask(key));
+    }
+
     @PostMapping("/decide-approval")
     public ResponseEntity<Void> decideApproval(@AuthenticationPrincipal Jwt jwt, @RequestBody ApprovalDecisionRequest approvalDecisionRequest) {
         var userId = jwt.getClaimAsString("preferred_username");
-        taskService.makeApplicationDecision(userId, approvalDecisionRequest.userTaskId(), approvalDecisionRequest.approved());
+        taskService.makeApplicationDecision(userId, approvalDecisionRequest.userTaskKey(), approvalDecisionRequest.approved());
 
         return ResponseEntity.ok().build();
     }

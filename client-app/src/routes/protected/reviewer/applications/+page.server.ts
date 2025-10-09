@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
         { fetch, accessToken: session?.accessToken }
     );
     return {
-        title: 'Available Tasks',
+        title: 'Tasks',
         apiResponse: apiResponse
     }
 }

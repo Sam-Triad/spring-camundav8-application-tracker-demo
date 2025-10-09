@@ -70,6 +70,43 @@ export async function makeRequest<T>(
 	throw new Error('Expected JSON response from API');
 }
 
+export async function decideApproval(
+	userTaskKey: string,
+	approved: boolean,
+	config: RequestConfig
+): Promise<Application> {
+	return makeRequest<Application>(
+		config,
+		{
+			url: `/tasks/decide-approval`,
+			httpMethod: HttpMethod.POST
+		},
+		{ userTaskKey, approved }
+	);
+}
+
+export async function claimUserTask(
+	key: string,
+	config: RequestConfig
+): Promise<UserTask> {
+	return makeRequest<UserTask>(config, {
+		url: `/tasks/claim-task/${key}`,
+		httpMethod: HttpMethod.POST
+	})
+}
+
+
+export async function getUserTask(
+	key: string,
+	config: RequestConfig
+): Promise<UserTask> {
+	return makeRequest<UserTask>(config, {
+		url: `/tasks/${key}`,
+		httpMethod: HttpMethod.GET
+	})
+}
+
+
 export async function getAvailableUserTasks(
 	config: RequestConfig
 ): Promise<UserTask[]> {
