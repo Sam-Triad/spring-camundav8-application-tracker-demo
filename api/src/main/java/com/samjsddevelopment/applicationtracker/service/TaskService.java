@@ -55,14 +55,6 @@ public class TaskService {
         return test;
     }
 
-    // public List<UserTaskDto> getCurrentUsersTasksInReview(String userId) {
-    // var results = camundaClient.newUserTaskQuery()
-    // .filter(f -> f.assignee(userId).state("CREATED"))
-    // .send()
-    // .join();
-    // return userTaskMapper.toDtos(results.items());
-    // }
-
     public void makeApplicationDecision(String userId, long userTaskId, boolean approved) {
         var userTaskList = camundaClient.newUserTaskQuery()
                 .filter(f -> f.assignee(userId).key(userTaskId).state("CREATED"))

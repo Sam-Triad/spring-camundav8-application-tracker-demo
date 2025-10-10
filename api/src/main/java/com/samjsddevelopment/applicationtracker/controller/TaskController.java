@@ -7,15 +7,12 @@ import com.samjsddevelopment.applicationtracker.dto.ApprovalDecisionRequest;
 import com.samjsddevelopment.applicationtracker.dto.UserTaskDto;
 import com.samjsddevelopment.applicationtracker.service.TaskService;
 
-import io.camunda.zeebe.client.api.search.response.UserTask;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -31,15 +28,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class TaskController {
 
     private final TaskService taskService;
-
-    // @GetMapping("/in-review")
-    // @Operation(summary = "List tasks assigned to current user")
-    // public ResponseEntity<List<UserTaskDto>> getTasksInReview(
-    //         @AuthenticationPrincipal Jwt jwt) {
-    //     var userId = jwt.getClaimAsString("preferred_username");
-
-    //     return ResponseEntity.ok(taskService.getCurrentUsersTasksInReview(userId));
-    // }
 
     @GetMapping("/available")
     @Operation(summary = "List unassigned tasks")
