@@ -1,19 +1,10 @@
 <script lang="ts">
+	import { getTaskStatusTag } from '$lib/utils/taskStatus';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	let tasks = $derived(data.apiResponse);
-	function getStatusTag(status: string) {
-		switch (status) {
-			case 'CREATED':
-				return { text: 'Available', class: 'govuk-tag--grey' };
-			case 'COMPLETED':
-				return { text: 'Done', class: 'govuk-tag--green' };
-			default:
-				return { text: status, class: '' };
-		}
-	}
 </script>
 
 <div class="govuk-grid-row">
@@ -32,12 +23,6 @@
 				<div class="govuk-!-margin-bottom-8">
 					<h2 class="govuk-heading-l">
 						{task.elementId.split('_').join(' ')}
-						<!-- <strong
-							class="govuk-tag {getStatusTag(application.applicationStatus)
-								.class} govuk-!-margin-left-2"
-						>
-							{getStatusTag(application.applicationStatus).text}
-						</strong> -->
 					</h2>
 
 					<dl class="govuk-summary-list govuk-!-margin-bottom-4">
@@ -48,15 +33,9 @@
 						<div class="govuk-summary-list__row">
 							<dt class="govuk-summary-list__key">Status</dt>
 							<dd class="govuk-summary-list__value">
-								{getStatusTag(task.state).text}
+								{getTaskStatusTag(task.state).text}
 							</dd>
 						</div>
-						<!-- {#if application.information}
-							<div class="govuk-summary-list__row">
-								<dt class="govuk-summary-list__key">Information</dt>
-								<dd class="govuk-summary-list__value">{application.information}</dd>
-							</div>
-						{/if} -->
 					</dl>
 
 					<p class="govuk-body">

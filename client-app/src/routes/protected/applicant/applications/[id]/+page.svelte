@@ -1,26 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { getApplicationStatusTag } from '$lib/utils/applicationStatus';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	let application = $derived(data.apiResponse);
 	let isSubmitting = $state(false);
-
-	function getStatusTag(status: string) {
-		switch (status) {
-			case 'WAITING_FOR_SUBMISSION':
-				return { text: 'In Progress', class: 'govuk-tag--grey' };
-			case 'IN_REVIEW':
-				return { text: 'In review', class: 'govuk-tag--blue' };
-			case 'APPROVED':
-				return { text: 'Approved', class: 'govuk-tag--green' };
-			case 'REJECTED':
-				return { text: 'Rejected', class: 'govuk-tag--red' };
-			default:
-				return { text: status, class: '' };
-		}
-	}
 </script>
 
 <div class="govuk-grid-row">
@@ -47,8 +33,8 @@
 			<div class="govuk-summary-list__row">
 				<dt class="govuk-summary-list__key">Status</dt>
 				<dd class="govuk-summary-list__value">
-					<strong class="govuk-tag {getStatusTag(application.applicationStatus).class}">
-						{getStatusTag(application.applicationStatus).text}
+					<strong class="govuk-tag {getApplicationStatusTag(application.applicationStatus).class}">
+						{getApplicationStatusTag(application.applicationStatus).text}
 					</strong>
 				</dd>
 			</div>
