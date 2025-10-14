@@ -301,6 +301,18 @@ services:
       KEYCLOAK_USERS_3_FIRST_NAME: "Bob"
       KEYCLOAK_USERS_3_EMAIL: "bob@triad.co.uk"
 
+      KEYCLOAK_USERS_4_USERNAME: "second_level_admin"
+      KEYCLOAK_USERS_4_PASSWORD: "second_level_admin"
+      KEYCLOAK_USERS_4_FIRST_NAME: "Second Admin"
+      KEYCLOAK_USERS_4_EMAIL: "secondadmin@triad.co.uk"
+      KEYCLOAK_USERS_4_ROLES_0: "Identity"
+      KEYCLOAK_USERS_4_ROLES_1: "Optimize"
+      KEYCLOAK_USERS_4_ROLES_2: "Operate"
+      KEYCLOAK_USERS_4_ROLES_3: "Tasklist"
+      KEYCLOAK_USERS_4_ROLES_4: "Web Modeler"
+      KEYCLOAK_USERS_4_ROLES_5: "Web Modeler Admin"
+      KEYCLOAK_USERS_4_ROLES_6: "Zeebe"
+
       KEYCLOAK_CLIENTS_0_NAME: Zeebe
       KEYCLOAK_CLIENTS_0_ID: ${ZEEBE_CLIENT_ID}
       KEYCLOAK_CLIENTS_0_SECRET: ${ZEEBE_CLIENT_SECRET}
