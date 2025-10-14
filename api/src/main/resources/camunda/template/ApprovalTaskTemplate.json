@@ -1,0 +1,178 @@
+[
+  {
+    "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
+    "name": "User Approval Task",
+    "id": "UserApprovalTask",
+    "description": "Reusable user task for approval workflows with configurable user assignment and form references",
+    "version": 1,
+    "keywords": [
+      "approval",
+      "user task",
+      "form"
+    ],
+    "engines": {
+      "camunda": "^8.7"
+    },
+    "appliesTo": [
+      "bpmn:Activity"
+    ],
+    "elementType": {
+      "value": "bpmn:UserTask"
+    },
+    "groups": [
+      {
+        "id": "general",
+        "label": "General",
+        "openByDefault": true
+      },
+      {
+        "id": "assignment",
+        "label": "Task Assignment",
+        "tooltip": "Configure who can perform this task"
+      },
+      {
+        "id": "form",
+        "label": "Form Configuration",
+        "tooltip": "Configure form settings"
+      },
+      {
+        "id": "variables",
+        "label": "Variables",
+        "tooltip": "Configure input and output variables"
+      }
+    ],
+    "properties": [
+      {
+        "type": "Hidden",
+        "binding": {
+          "type": "zeebe:userTask"
+        }
+      },
+      {
+        "id": "taskName",
+        "group": "general",
+        "label": "Task Name",
+        "description": "Name of the approval task",
+        "type": "String",
+        "value": "Approval",
+        "constraints": {
+          "notEmpty": true
+        },
+        "binding": {
+          "type": "property",
+          "name": "name"
+        }
+      },
+      {
+        "id": "taskDescription",
+        "group": "general",
+        "label": "Description",
+        "description": "Optional description for the task",
+        "type": "Text",
+        "binding": {
+          "type": "zeebe:property",
+          "name": "description"
+        }
+      },
+      {
+        "id": "assignmentType",
+        "group": "assignment",
+        "label": "Assignment Type",
+        "description": "Choose how to assign this task",
+        "type": "Dropdown",
+        "value": "groups",
+        "choices": [
+          {
+            "name": "Candidate Groups",
+            "value": "groups"
+          },
+          {
+            "name": "Candidate Users",
+            "value": "users"
+          }
+        ],
+        "binding": {
+          "type": "property",
+          "name": "camunda:assignmentType"
+        }
+      },
+      {
+        "id": "candidateGroups",
+        "group": "assignment",
+        "label": "Candidate Groups",
+        "description": "Groups that can perform this task (comma-separated)",
+        "type": "String",
+        "placeholder": "e.g., Verifier, First_Level_Admin, Second_Level_Admin",
+        "binding": {
+          "type": "zeebe:input",
+          "name": "candidateGroups"
+        },
+        "condition": {
+          "property": "assignmentType",
+          "equals": "groups"
+        }
+      },
+      {
+        "id": "candidateUsers",
+        "group": "assignment",
+        "label": "Candidate Users",
+        "description": "Users that can perform this task (comma-separated)",
+        "type": "String",
+        "placeholder": "verifier, test_applicant, first_level_admin",
+        "binding": {
+          "type": "zeebe:input",
+          "name": "candidateUsers"
+        },
+        "condition": {
+          "property": "assignmentType",
+          "equals": "users"
+        }
+      },
+      {
+        "id": "formExternalReference",
+        "group": "form",
+        "label": "Form Reference",
+        "description": "External form definition reference",
+        "type": "String",
+        "placeholder": "e.g., approval_form",
+        "constraints": {
+          "notEmpty": true
+        },
+        "binding": {
+          "type": "zeebe:formDefinition",
+          "property": "externalReference"
+        }
+      },
+      {
+        "id": "decisionVariableName",
+        "group": "variables",
+        "label": "Decision Variable Name",
+        "description": "Variable name to store the approval decision",
+        "type": "String",
+        "value": "approved",
+        "constraints": {
+          "notEmpty": true
+        },
+        "binding": {
+          "type": "zeebe:input",
+          "name": "decision"
+        }
+      },
+      {
+        "id": "outputVariableName",
+        "group": "variables",
+        "label": "Output Variable Name",
+        "description": "Variable name to store the final approval result",
+        "type": "String",
+        "value": "approvalResult",
+        "constraints": {
+          "notEmpty": true
+        },
+        "binding": {
+          "type": "zeebe:output",
+          "source": "=decision"
+        }
+      }
+    ]
+  }
+]
