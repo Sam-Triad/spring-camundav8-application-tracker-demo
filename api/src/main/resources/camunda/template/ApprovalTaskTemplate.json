@@ -102,21 +102,6 @@
         }
       },
       {
-        "id": "decisionVariableName",
-        "group": "variables",
-        "label": "Decision Variable Name",
-        "description": "Variable name to store the approval decision",
-        "type": "String",
-        "value": "approved",
-        "constraints": {
-          "notEmpty": true
-        },
-        "binding": {
-          "type": "zeebe:input",
-          "name": "decision"
-        }
-      },
-      {
         "id": "outputVariableName",
         "group": "variables",
         "label": "Output Variable Name",
@@ -128,7 +113,7 @@
         },
         "binding": {
           "type": "zeebe:output",
-          "source": "=decision"
+          "source": "=approved"
         }
       }
     ]
