@@ -18,7 +18,7 @@ export const load: PageServerLoad = async (event) => {
 		throw redirect(303, '/protected/applicant');
 	}
 	
-	if (roles.includes('Verifier') || roles.includes('First_Level_Admin')) {
+	if (roles.includes('Verifier') || roles.includes('First_Level_Admin')|| roles.includes('Second_Level_Admin')) {
 		throw redirect(303, '/protected/reviewer');
 	}
 	

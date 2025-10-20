@@ -98,7 +98,6 @@
 					Your application reference<br /><strong>{application.id}</strong>
 				</div>
 			</div>
-			<p class="govuk-body">We have sent you a confirmation email.</p>
 		{:else if application.applicationStatus === 'REJECTED'}
 			<div class="govuk-warning-text">
 				<span class="govuk-warning-text__icon" aria-hidden="true">!</span>
@@ -107,11 +106,6 @@
 					Your application has been rejected.
 				</strong>
 			</div>
-			<p class="govuk-body">
-				If you have questions about this decision, please <a href="/contact" class="govuk-link"
-					>contact us</a
-				>.
-			</p>
 		{/if}
 	</div>
 </div>

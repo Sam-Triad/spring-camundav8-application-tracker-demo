@@ -45,6 +45,8 @@ export async function makeRequest<T>(
 			};
 		}
 
+		console.error('API Error Response:', res);
+		console.error('API Error Details:', body);
 		throw new ApiError(body);
 	}
 

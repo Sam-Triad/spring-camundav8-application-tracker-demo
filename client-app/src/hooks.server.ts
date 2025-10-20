@@ -2,6 +2,7 @@ import { redirect, error, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { handle as authConfig } from '$lib/server/authConfig';
 import { env } from '$env/dynamic/private';
+
 const authentication: Handle = async ({ event, resolve }) => {
 
 	// Public routes
