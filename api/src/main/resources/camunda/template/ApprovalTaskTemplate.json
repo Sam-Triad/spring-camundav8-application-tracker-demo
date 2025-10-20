@@ -75,28 +75,6 @@
         }
       },
       {
-        "id": "assignmentType",
-        "group": "assignment",
-        "label": "Assignment Type",
-        "description": "Choose how to assign this task",
-        "type": "Dropdown",
-        "value": "groups",
-        "choices": [
-          {
-            "name": "Candidate Groups",
-            "value": "groups"
-          },
-          {
-            "name": "Candidate Users",
-            "value": "users"
-          }
-        ],
-        "binding": {
-          "type": "property",
-          "name": "camunda:assignmentType"
-        }
-      },
-      {
         "id": "candidateGroups",
         "group": "assignment",
         "label": "Candidate Groups",
@@ -104,28 +82,8 @@
         "type": "String",
         "placeholder": "e.g., Verifier, First_Level_Admin, Second_Level_Admin",
         "binding": {
-          "type": "zeebe:input",
-          "name": "candidateGroups"
-        },
-        "condition": {
-          "property": "assignmentType",
-          "equals": "groups"
-        }
-      },
-      {
-        "id": "candidateUsers",
-        "group": "assignment",
-        "label": "Candidate Users",
-        "description": "Users that can perform this task (comma-separated)",
-        "type": "String",
-        "placeholder": "verifier, test_applicant, first_level_admin",
-        "binding": {
-          "type": "zeebe:input",
-          "name": "candidateUsers"
-        },
-        "condition": {
-          "property": "assignmentType",
-          "equals": "users"
+          "type": "zeebe:assignmentDefinition",
+          "property": "candidateGroups"
         }
       },
       {
