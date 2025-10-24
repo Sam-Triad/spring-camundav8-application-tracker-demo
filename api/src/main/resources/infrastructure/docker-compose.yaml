@@ -274,7 +274,7 @@ services:
 
       KEYCLOAK_USERS_1_USERNAME: "verifier"
       KEYCLOAK_USERS_1_PASSWORD: "verifier"
-      KEYCLOAK_USERS_1_FIRST_NAME: "Mr. Verifier"
+      KEYCLOAK_USERS_1_FIRST_NAME: "Verifier Name"
       KEYCLOAK_USERS_1_EMAIL: "verifier@triad.co.uk"
       KEYCLOAK_USERS_1_ROLES_0: "Identity"
       KEYCLOAK_USERS_1_ROLES_1: "Optimize"
@@ -286,7 +286,7 @@ services:
 
       KEYCLOAK_USERS_2_USERNAME: "first_level_admin"
       KEYCLOAK_USERS_2_PASSWORD: "first_level_admin"
-      KEYCLOAK_USERS_2_FIRST_NAME: "Perry the Admin"
+      KEYCLOAK_USERS_2_FIRST_NAME: "Admin Name"
       KEYCLOAK_USERS_2_EMAIL: "perry@triad.co.uk"
       KEYCLOAK_USERS_2_ROLES_0: "Identity"
       KEYCLOAK_USERS_2_ROLES_1: "Optimize"
@@ -298,12 +298,12 @@ services:
 
       KEYCLOAK_USERS_3_USERNAME: "test_applicant"
       KEYCLOAK_USERS_3_PASSWORD: "test_applicant"
-      KEYCLOAK_USERS_3_FIRST_NAME: "Bob"
+      KEYCLOAK_USERS_3_FIRST_NAME: "Example User"
       KEYCLOAK_USERS_3_EMAIL: "bob@triad.co.uk"
 
       KEYCLOAK_USERS_4_USERNAME: "second_level_admin"
       KEYCLOAK_USERS_4_PASSWORD: "second_level_admin"
-      KEYCLOAK_USERS_4_FIRST_NAME: "Second Admin"
+      KEYCLOAK_USERS_4_FIRST_NAME: "Second Admin Name"
       KEYCLOAK_USERS_4_EMAIL: "secondadmin@triad.co.uk"
       KEYCLOAK_USERS_4_ROLES_0: "Identity"
       KEYCLOAK_USERS_4_ROLES_1: "Optimize"
